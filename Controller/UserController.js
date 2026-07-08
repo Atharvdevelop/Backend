@@ -35,4 +35,68 @@ const GetAllUser = async (req,res) => {
     }
 };
 
-module.exports = {CreateUser,GetAllUser};
+const GetAllUserById = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if(user){
+            res.status(200).json(user);
+        }
+        else{
+            res.status(404).json({message: 'User not found'})
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    } 
+};
+
+const UpdateUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if(user){
+            await user.update(req.body);
+            res.status(200).json(user);
+    }
+    else{
+        res.status(404).json({message: 'User not found'})
+    }
+} catch (error) {
+    res.status(500).json({message: error.message})
+}
+
+};
+const DeleteUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if(user){
+            await user.destroy();
+            res.status(200).json({message: 'User deleted successfully'});
+    }
+    else{
+        res.status(404).json({message: 'User not found'})
+    }
+} catch (error) {
+    res.status(500).json({message: error.message})
+}
+
+};
+
+const LoginUser = async (req,res)=>{
+    try {
+        const {email,password}=req.body;
+        const user = await User.findOne({where: {email}})
+        if(!user){
+            res.status(400).json({error : 'User not found'});
+        }
+        else if (user.password !== password){
+            return res.status(401).json({error : 'Invalid password'})
+        }
+        else{
+            res.status(200).json({message : 'Login successfully' , user});
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    } 
+};
+
+
+module.exports = {CreateUser,GetAllUser,UpdateUser,GetAllUserById,DeleteUser,LoginUser};
