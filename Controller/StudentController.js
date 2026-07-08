@@ -46,5 +46,6 @@ const UpdateStudent = async (req,res)=>{
 } catch (error) {
     res.status(500).json({message: error.message})
 }
-
 };
+
+module.exports = { CreateStudent, GetAllStudent, GetAllStudentById, UpdateStudent };

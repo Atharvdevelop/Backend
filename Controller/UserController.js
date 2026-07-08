@@ -36,35 +36,6 @@ const GetAllUser = async (req, res) => {
     }
 };
 
-const GetAllUserById = async (req, res) => {
-    try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            res.status(200).json(user);
-        }
-        else {
-            res.status(404).json({ message: 'User not found' })
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-};
-
-const UpdateUser = async (req, res) => {
-    try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            await user.update(req.body);
-            res.status(200).json(user);
-        }
-        else {
-            res.status(404).json({ message: 'User not found' })
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-
-};
 const DeleteUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
@@ -100,4 +71,4 @@ const LoginUser = async (req, res) => {
 };
 
 
-module.exports = { CreateUser, GetAllUser, UpdateUser, GetAllUserById, DeleteUser, LoginUser };
+module.exports = { CreateUser, GetAllUser, DeleteUser, LoginUser };
