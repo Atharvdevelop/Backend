@@ -1,102 +1,103 @@
 const User = require('../Models/UserModel');
-const CreateUser = async (req,res) => {
-    try{
-        const{username,email,password}=req.body;
-        const newuser = await User.create({username,email,password});
+
+const CreateUser = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+        const newuser = await User.create({ username, email, password });
         res.status(201).json(newuser);
 
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        res.status(500).json({message:'Internal Server Error'})
+        res.status(500).json({ message: 'Internal Server Error' })
     }
 };
 // This is a universal code can be use anywhere to send whole code body
 
 //const CreareUser = async (req,res)=> {
-  //  try {
-    //    const newuser = await User.Create(req.body);
-      //  res.status(201).json(newspaper);
-  //  }
-  //  catch (error){
-    //    res.status(500).json({error :error.message});
-   // }
+//  try {
+//    const newuser = await User.Create(req.body);
+//  res.status(201).json(newspaper);
+//  }
+//  catch (error){
+//    res.status(500).json({error :error.message});
+// }
 //}
 
 
-const GetAllUser = async (req,res) => {
-    try{
+const GetAllUser = async (req, res) => {
+    try {
         const users = await User.findAll();
         res.status(200).json(users);
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        res.status(500).json({message:'Internal Server Error'})
+        res.status(500).json({ message: 'Internal Server Error' })
     }
 };
 
 const GetAllUserById = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
-        if(user){
+        if (user) {
             res.status(200).json(user);
         }
-        else{
-            res.status(404).json({message: 'User not found'})
+        else {
+            res.status(404).json({ message: 'User not found' })
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
-    } 
+        res.status(500).json({ message: error.message })
+    }
 };
 
 const UpdateUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
-        if(user){
+        if (user) {
             await user.update(req.body);
             res.status(200).json(user);
+        }
+        else {
+            res.status(404).json({ message: 'User not found' })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
     }
-    else{
-        res.status(404).json({message: 'User not found'})
-    }
-} catch (error) {
-    res.status(500).json({message: error.message})
-}
 
 };
 const DeleteUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
-        if(user){
+        if (user) {
             await user.destroy();
-            res.status(200).json({message: 'User deleted successfully'});
-    }
-    else{
-        res.status(404).json({message: 'User not found'})
-    }
-} catch (error) {
-    res.status(500).json({message: error.message})
-}
-
-};
-
-const LoginUser = async (req,res)=>{
-    try {
-        const {email,password}=req.body;
-        const user = await User.findOne({where: {email}})
-        if(!user){
-            res.status(400).json({error : 'User not found'});
+            res.status(200).json({ message: 'User deleted successfully' });
         }
-        else if (user.password !== password){
-            return res.status(401).json({error : 'Invalid password'})
-        }
-        else{
-            res.status(200).json({message : 'Login successfully' , user});
+        else {
+            res.status(404).json({ message: 'User not found' })
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
-    } 
+        res.status(500).json({ message: error.message })
+    }
+
+};
+
+const LoginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email } })
+        if (!user) {
+            res.status(400).json({ error: 'User not found' });
+        }
+        else if (user.password !== password) {
+            return res.status(401).json({ error: 'Invalid password' })
+        }
+        else {
+            res.status(200).json({ message: 'Login successfully', user });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
 };
 
 
-module.exports = {CreateUser,GetAllUser,UpdateUser,GetAllUserById,DeleteUser,LoginUser};
+module.exports = { CreateUser, GetAllUser, UpdateUser, GetAllUserById, DeleteUser, LoginUser };
